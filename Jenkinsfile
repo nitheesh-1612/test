@@ -1,21 +1,44 @@
 pipeline {
     agent any
-    stages("build") {
-        steps {
-            echo 'building the application'
-        }
+    environment {
+        NEW_VERSION = '1.3.5'
     }
-    stages("test") {
-        when {
-            expression {
-                BRANCH_NAME == 'dev'
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the Application'
+                echo "The Version Number is ${NEW_VERSION}"
             }
         }
-        steps {
-            echo 'building the application'
+        stage('Test') {
+            when {
+                expression {
+                    NEW_VERSION == '1.3.5'
+                }
+            }
+            steps {
+                echo 'Testing the Application'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the Application'
+            }
         }
     }
     
-    
+    post {
+        always {
+            echo 'Run is completed'
+        }
+        
+        success {
+            echo 'Run is successful'
+        }
+        
+        failure {
+            echo 'Run is failed'
+        }
+    }
     
 }
